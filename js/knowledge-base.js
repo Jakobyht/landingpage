@@ -1,5 +1,6 @@
 import { auth, db } from "./firebase-config.js";
 import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-firestore.js";
+import { signOut } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-auth.js";
 import { requireAuth } from "./router.js";
 
 const form = document.getElementById("kb-form");
@@ -69,6 +70,12 @@ form.addEventListener("submit", async (e) => {
         showError("Failed to save. Please try again.");
         loading.classList.remove("visible");
     }
+});
+
+const logoutBtn = document.getElementById("logout-btn");
+logoutBtn.addEventListener("click", async () => {
+    await signOut(auth);
+    window.location.href = "index.html";
 });
 
 init();
