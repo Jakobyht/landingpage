@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Achievements — CV Builder</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <nav class="navbar">
+    <a href="dashboard.html" class="navbar-brand">CV Builder</a>
+  </nav>
+
+  <div class="page">
+    <div class="steps">
+      <div class="step active">1. Achievements</div>
+      <div class="step">2. Company</div>
+      <div class="step">3. Styling</div>
+    </div>
+
+    <h2>Your Achievements</h2>
+    <p class="subtitle">Provide context about your experience, skills, and accomplishments. You can use any combination
+      of the inputs below.</p>
+
+    <div id="error" class="error-msg"></div>
+
+    <form id="step1-form">
+      <!-- Text input -->
+      <div class="form-group">
+        <label for="achievements-text">Describe your experience</label>
+        <textarea id="achievements-text" rows="6"
+          placeholder="List your skills, work experience, education, projects, achievements..."></textarea>
+        <p class="hint">Write freely — the AI will structure this for you.</p>
+      </div>
+
+      <div class="row">
+        <div class="form-group">
+          <label for="contact-email">Email Address</label>
+          <input type="email" id="contact-email" placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label for="contact-linkedin">LinkedIn Profile URL</label>
+          <input type="url" id="contact-linkedin" placeholder="https://linkedin.com/in/yourname">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="website-url">Portfolio / Personal Website</label>
+        <input type="url" id="website-url" placeholder="https://yourportfolio.com">
+        <p class="hint">Optional — the AI will extract context from your site.</p>
+      </div>
+
+      <hr class="divider">
+
+      <!-- File upload -->
+      <div class="form-group">
+        <label>Upload a CV (PDF) or screenshot (image)</label>
+        <div class="upload-area" id="upload-area">
+          <p class="upload-label">Click to upload or drag & drop</p>
+          <p>PDF, PNG, JPG — max 10 MB</p>
+        </div>
+        <input type="file" id="file-input" accept=".pdf,.png,.jpg,.jpeg" style="display:none;">
+        <div id="file-preview" class="file-preview" style="display:none;">
+          <span class="file-name" id="file-name"></span>
+          <span class="remove-file" id="remove-file">&times;</span>
+        </div>
+      </div>
+
+      <div class="form-nav">
+        <a href="dashboard.html" class="btn btn-outline">Cancel</a>
+        <button type="submit" class="btn">Next: Company Info</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="loading-overlay" id="loading">
+    <div class="spinner"></div>
+    <p class="loading-text" id="loading-text">Saving...</p>
+  </div>
+
+  <script type="module" src="js/step1.js"></script>
+</body>
+
+</html>

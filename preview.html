@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preview — CV Builder</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <nav class="navbar">
+    <a href="dashboard.html" class="navbar-brand">CV Builder</a>
+    <div class="navbar-actions">
+      <a href="dashboard.html" class="btn-ghost">Back to Projects</a>
+    </div>
+  </nav>
+
+  <div class="page-wide">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+      <div>
+        <h1 id="page-title">Generating your CV...</h1>
+        <p class="subtitle" style="margin-bottom:0;" id="page-subtitle">This may take a moment.</p>
+      </div>
+      <div class="preview-actions" id="actions" style="display:none;">
+        <button class="btn btn-outline" id="regenerate-btn">Regenerate</button>
+        <button class="btn" id="download-btn">Download HTML</button>
+      </div>
+    </div>
+
+    <iframe id="preview-frame" class="preview-frame" style="display:none;"></iframe>
+
+    <div id="error" class="error-msg" style="margin-top:16px;"></div>
+  </div>
+
+  <div class="loading-overlay visible" id="loading">
+    <div class="spinner"></div>
+    <p class="loading-text" id="loading-text">Reading your project data...</p>
+  </div>
+
+  <script type="module" src="js/generate.js?v=2"></script>
+</body>
+
+</html>

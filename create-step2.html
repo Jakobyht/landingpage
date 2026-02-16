@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Company Info — CV Builder</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <nav class="navbar">
+    <a href="dashboard.html" class="navbar-brand">CV Builder</a>
+  </nav>
+
+  <div class="page">
+    <div class="steps">
+      <div class="step completed">1. Achievements</div>
+      <div class="step active">2. Company</div>
+      <div class="step">3. Styling</div>
+    </div>
+
+    <h2>Target Company</h2>
+    <p class="subtitle">Tell us about the company you're applying to. This helps the AI personalize your CV.</p>
+
+    <div id="error" class="error-msg"></div>
+
+    <form id="step2-form">
+      <div class="form-group">
+        <label for="company-name">Company Name</label>
+        <input type="text" id="company-name" required placeholder="e.g. Google">
+      </div>
+
+      <div class="form-group">
+        <label for="company-url">Company Website</label>
+        <input type="url" id="company-url" placeholder="https://google.com">
+        <p class="hint">Used by the AI to extract brand colors and context.</p>
+      </div>
+
+      <div class="form-group">
+        <label for="job-description">Job Description / Posting</label>
+        <textarea id="job-description" rows="6"
+          placeholder="Paste the job description or requirements here..."></textarea>
+        <p class="hint">The AI will use this to highlight your most relevant skills.</p>
+      </div>
+
+      <hr class="divider">
+
+      <div class="form-group">
+        <label>Company Logo</label>
+        <div class="upload-area" id="logo-upload-area">
+          <p class="upload-label">Click to upload logo</p>
+          <p>PNG, JPG, SVG — max 5 MB</p>
+        </div>
+        <input type="file" id="logo-input" accept=".png,.jpg,.jpeg,.svg,.webp" style="display:none;">
+        <div id="logo-preview-container" class="file-preview" style="display:none;">
+          <img id="logo-img" class="logo-preview visible" alt="Logo">
+          <span class="file-name" id="logo-name"></span>
+          <span class="remove-file" id="remove-logo">&times;</span>
+        </div>
+      </div>
+
+      <div class="form-nav">
+        <a id="back-link" class="btn btn-outline">Back</a>
+        <button type="submit" class="btn">Next: Styling</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="loading-overlay" id="loading">
+    <div class="spinner"></div>
+    <p class="loading-text">Saving...</p>
+  </div>
+
+  <script type="module" src="js/step2.js"></script>
+</body>
+
+</html>

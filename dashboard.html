@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — CV Builder</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="dashboard.html" class="navbar-brand">CV Builder</a>
+    <div class="navbar-actions">
+      <button id="logout-btn" class="btn-ghost">Log out</button>
+    </div>
+  </nav>
+
+  <div class="page-wide">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:32px;">
+      <div>
+        <h1>Your Projects</h1>
+        <p class="subtitle" style="margin-bottom:0;">Personalized CV websites for each company.</p>
+      </div>
+      <a href="create-step1.html" class="btn">New Project</a>
+    </div>
+
+    <div id="projects-container">
+      <div class="empty-state" id="empty-state">
+        <p>No projects yet. Create your first personalized CV.</p>
+        <a href="create-step1.html" class="btn">Create Project</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="loading-overlay" id="loading">
+    <div class="spinner"></div>
+    <p class="loading-text">Loading projects...</p>
+  </div>
+
+  <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>

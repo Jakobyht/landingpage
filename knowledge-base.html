@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Base — CV Builder</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="dashboard.html" class="navbar-brand">CV Builder</a>
+    </nav>
+
+    <div class="page">
+        <h1>Your Knowledge Base</h1>
+        <p class="subtitle">Fill this out once — we'll use it for every CV you generate.</p>
+
+        <div id="error" class="error-msg"></div>
+
+        <form id="kb-form">
+            <!-- Personal Info -->
+            <h3>Personal Information</h3>
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="kb-fullname">Full Name *</label>
+                    <input type="text" id="kb-fullname" required placeholder="Jane Doe">
+                </div>
+                <div class="form-group">
+                    <label for="kb-title">Professional Title *</label>
+                    <input type="text" id="kb-title" required placeholder="Senior Frontend Developer">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="kb-email">Email *</label>
+                    <input type="email" id="kb-email" required placeholder="you@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="kb-phone">Phone</label>
+                    <input type="text" id="kb-phone" placeholder="+1 555 123 4567">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="kb-linkedin">LinkedIn URL</label>
+                    <input type="url" id="kb-linkedin" placeholder="https://linkedin.com/in/yourname">
+                </div>
+                <div class="form-group">
+                    <label for="kb-location">Location</label>
+                    <input type="text" id="kb-location" placeholder="San Francisco, CA">
+                </div>
+            </div>
+
+            <hr class="divider">
+
+            <!-- Summary -->
+            <h3>Professional Summary</h3>
+            <div class="form-group">
+                <label for="kb-summary">Summary *</label>
+                <textarea id="kb-summary" rows="4" required
+                    placeholder="A brief professional summary about yourself, your strengths, and what drives you..."></textarea>
+                <p class="hint">2-4 sentences that capture your core value proposition.</p>
+            </div>
+
+            <hr class="divider">
+
+            <!-- Experience -->
+            <h3>Work Experience</h3>
+            <div class="form-group">
+                <label for="kb-experience">Experience *</label>
+                <textarea id="kb-experience" rows="8" required
+                    placeholder="Job Title — Company Name (Start - End)&#10;• Led a team of 5 engineers to deliver X, resulting in Y% improvement&#10;• Reduced server costs by 40% through infrastructure optimization&#10;&#10;Job Title — Company Name (Start - End)&#10;• ..."></textarea>
+                <p class="hint">List your roles with metrics-based achievements. Use the format: "Increased X by Y% in Z
+                    months."</p>
+            </div>
+
+            <hr class="divider">
+
+            <!-- Education -->
+            <h3>Education</h3>
+            <div class="form-group">
+                <label for="kb-education">Education</label>
+                <textarea id="kb-education" rows="4"
+                    placeholder="Degree — University Name (Year)&#10;Relevant coursework, honors, GPA if notable..."></textarea>
+            </div>
+
+            <hr class="divider">
+
+            <!-- Skills -->
+            <h3>Skills</h3>
+            <div class="form-group">
+                <label for="kb-skills">Skills *</label>
+                <textarea id="kb-skills" rows="3" required
+                    placeholder="JavaScript, React, Node.js, Python, SQL, Leadership, Agile..."></textarea>
+                <p class="hint">Comma-separated list of your technical and soft skills.</p>
+            </div>
+
+            <hr class="divider">
+
+            <!-- Certifications -->
+            <h3>Certifications & Other</h3>
+            <div class="form-group">
+                <label for="kb-certifications">Certifications</label>
+                <textarea id="kb-certifications" rows="3"
+                    placeholder="AWS Solutions Architect, Google Cloud Professional, PMP..."></textarea>
+            </div>
+
+            <div class="form-nav">
+                <span></span>
+                <button type="submit" class="btn">Save & Continue</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="loading-overlay" id="loading">
+        <div class="spinner"></div>
+        <p class="loading-text" id="loading-text">Saving your knowledge base...</p>
+    </div>
+
+    <script type="module" src="js/knowledge-base.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Styling — CV Builder</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <nav class="navbar">
+    <a href="dashboard.html" class="navbar-brand">CV Builder</a>
+  </nav>
+
+  <div class="page">
+    <div class="steps">
+      <div class="step completed">1. Achievements</div>
+      <div class="step completed">2. Company</div>
+      <div class="step active">3. Styling</div>
+    </div>
+
+    <h2>Styling Preferences</h2>
+    <p class="subtitle">Choose how your CV website should look, or let the AI match the company's branding.</p>
+
+    <div id="error" class="error-msg"></div>
+
+    <form id="step3-form">
+      <!-- Output Format -->
+      <h3>Output Format</h3>
+      <div style="margin-bottom:24px;">
+        <div style="display:flex; gap:8px; margin-bottom:16px;">
+          <button type="button" class="btn btn-sm format-mode-btn" data-mode="html">Web (HTML)</button>
+          <button type="button" class="btn btn-sm btn-outline format-mode-btn" data-mode="typst">PDF (Typst)</button>
+        </div>
+        <p class="hint" id="format-hint">Generates a responsive website.</p>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Colors -->
+      <h3>Colors</h3>
+      <div style="margin-bottom:24px;">
+        <div style="display:flex; gap:8px; margin-bottom:16px;">
+          <button type="button" class="btn btn-sm color-mode-btn" data-mode="custom">Custom Colors</button>
+          <button type="button" class="btn btn-sm btn-outline color-mode-btn" data-mode="company">Company Specific
+            Colors</button>
+        </div>
+
+        <div id="custom-colors">
+          <div class="form-group">
+            <label>Primary Color</label>
+            <div class="color-options" id="primary-colors">
+              <div class="color-swatch selected" style="background:#000000;" data-color="#000000"></div>
+              <div class="color-swatch" style="background:#1a1a2e;" data-color="#1a1a2e"></div>
+              <div class="color-swatch" style="background:#16213e;" data-color="#16213e"></div>
+              <div class="color-swatch" style="background:#0f3460;" data-color="#0f3460"></div>
+              <div class="color-swatch" style="background:#533483;" data-color="#533483"></div>
+              <div class="color-swatch" style="background:#e94560;" data-color="#e94560"></div>
+              <div class="color-swatch" style="background:#0a8754;" data-color="#0a8754"></div>
+              <div class="color-swatch" style="background:#c0392b;" data-color="#c0392b"></div>
+              <div class="color-swatch" style="background:#2c3e50;" data-color="#2c3e50"></div>
+              <div class="color-swatch" style="background:#8e44ad;" data-color="#8e44ad"></div>
+            </div>
+            <div class="color-custom">
+              <input type="color" id="primary-custom" value="#000000">
+              <span style="font-size:0.8125rem; color:#888;">Or pick any color</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Accent Color</label>
+            <div class="color-options" id="accent-colors">
+              <div class="color-swatch selected" style="background:#555555;" data-color="#555555"></div>
+              <div class="color-swatch" style="background:#e94560;" data-color="#e94560"></div>
+              <div class="color-swatch" style="background:#f39c12;" data-color="#f39c12"></div>
+              <div class="color-swatch" style="background:#3498db;" data-color="#3498db"></div>
+              <div class="color-swatch" style="background:#2ecc71;" data-color="#2ecc71"></div>
+              <div class="color-swatch" style="background:#e74c3c;" data-color="#e74c3c"></div>
+              <div class="color-swatch" style="background:#9b59b6;" data-color="#9b59b6"></div>
+              <div class="color-swatch" style="background:#1abc9c;" data-color="#1abc9c"></div>
+              <div class="color-swatch" style="background:#e67e22;" data-color="#e67e22"></div>
+              <div class="color-swatch" style="background:#34495e;" data-color="#34495e"></div>
+            </div>
+            <div class="color-custom">
+              <input type="color" id="accent-custom" value="#555555">
+              <span style="font-size:0.8125rem; color:#888;">Or pick any color</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Fonts -->
+      <h3>Fonts</h3>
+      <div style="margin-bottom:24px;">
+        <div style="display:flex; gap:8px; margin-bottom:16px;">
+          <button type="button" class="btn btn-sm font-mode-btn" data-mode="custom">Custom Font</button>
+          <button type="button" class="btn btn-sm btn-outline font-mode-btn" data-mode="company">Company Specific
+            Fonts</button>
+        </div>
+
+        <div id="custom-fonts">
+          <div class="form-group">
+            <label for="font-select">Font Family</label>
+            <select id="font-select">
+              <option value="Inter">Inter</option>
+              <option value="Roboto">Roboto</option>
+              <option value="Open Sans">Open Sans</option>
+              <option value="Lato">Lato</option>
+              <option value="Montserrat">Montserrat</option>
+              <option value="Playfair Display">Playfair Display</option>
+              <option value="Merriweather">Merriweather</option>
+              <option value="Source Sans Pro">Source Sans Pro</option>
+              <option value="Poppins">Poppins</option>
+              <option value="Raleway">Raleway</option>
+              <option value="PT Serif">PT Serif</option>
+              <option value="Georgia">Georgia</option>
+            </select>
+          </div>
+          <div id="font-preview" style="padding:16px; border:1px solid #e0e0e0; font-size:0.875rem;">
+            <p id="font-preview-text">The quick brown fox jumps over the lazy dog.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-nav">
+        <a id="back-link" class="btn btn-outline">Back</a>
+        <button type="submit" class="btn">Generate CV</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="loading-overlay" id="loading">
+    <div class="spinner"></div>
+    <p class="loading-text">Saving...</p>
+  </div>
+
+  <script type="module" src="js/step3.js"></script>
+</body>
+
+</html>

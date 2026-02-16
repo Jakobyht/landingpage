@@ -1,0 +1,468 @@
+/* ===== RESET & BASE ===== */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  background: #fff;
+  color: #000;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a {
+  color: #000;
+  text-decoration: underline;
+}
+
+a:hover {
+  opacity: 0.7;
+}
+
+/* ===== LAYOUT ===== */
+.page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 60px 24px;
+}
+
+.page-wide {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 60px 24px;
+}
+
+.row {
+  display: flex;
+  gap: 16px;
+}
+
+.row .form-group {
+  flex: 1;
+}
+
+/* ===== TYPOGRAPHY ===== */
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+p.subtitle {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 40px;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.navbar-brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-decoration: none;
+}
+
+.navbar-brand:hover {
+  opacity: 1;
+}
+
+.navbar-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid #000;
+  background: #000;
+  color: #fff;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  text-decoration: none;
+  gap: 8px;
+}
+
+.btn:hover {
+  opacity: 0.85;
+}
+
+.btn-outline {
+  background: #fff;
+  color: #000;
+}
+
+.btn-outline:hover {
+  background: #f5f5f5;
+  opacity: 1;
+}
+
+.btn-ghost {
+  background: transparent;
+  border: none;
+  color: #000;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.btn-ghost:hover {
+  background: #f5f5f5;
+}
+
+.btn-sm {
+  padding: 6px 14px;
+  font-size: 0.8125rem;
+}
+
+.btn-full {
+  width: 100%;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ===== FORMS ===== */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="url"],
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 0.875rem;
+  border: 1px solid #d0d0d0;
+  background: #fff;
+  color: #000;
+  font-family: inherit;
+  transition: border-color 0.15s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #000;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.form-group .hint {
+  font-size: 0.75rem;
+  color: #888;
+  margin-top: 4px;
+}
+
+/* ===== FILE UPLOAD ===== */
+.upload-area {
+  border: 2px dashed #d0d0d0;
+  padding: 32px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.upload-area:hover {
+  border-color: #000;
+}
+
+.upload-area p {
+  font-size: 0.875rem;
+  color: #888;
+}
+
+.upload-area .upload-label {
+  font-weight: 500;
+  color: #000;
+  margin-bottom: 4px;
+}
+
+.file-preview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  margin-top: 8px;
+  font-size: 0.875rem;
+}
+
+.file-preview .file-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-preview .remove-file {
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #888;
+}
+
+.file-preview .remove-file:hover {
+  color: #000;
+}
+
+/* ===== CARDS ===== */
+.card {
+  border: 1px solid #e0e0e0;
+  padding: 20px;
+  transition: border-color 0.15s;
+}
+
+.card:hover {
+  border-color: #000;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.card-title {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+.card-meta {
+  font-size: 0.8125rem;
+  color: #888;
+  margin-bottom: 12px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ===== STEPS INDICATOR ===== */
+.steps {
+  display: flex;
+  gap: 0;
+  margin-bottom: 40px;
+}
+
+.step {
+  flex: 1;
+  text-align: center;
+  padding: 12px 0;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #aaa;
+  border-bottom: 2px solid #e0e0e0;
+  position: relative;
+}
+
+.step.active {
+  color: #000;
+  border-bottom-color: #000;
+}
+
+.step.completed {
+  color: #666;
+  border-bottom-color: #000;
+}
+
+/* ===== COLOR PICKER ===== */
+.color-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.color-swatch {
+  width: 36px;
+  height: 36px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.color-swatch:hover,
+.color-swatch.selected {
+  border-color: #000;
+}
+
+.color-custom {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.color-custom input[type="color"] {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #d0d0d0;
+  padding: 2px;
+  cursor: pointer;
+  background: #fff;
+}
+
+/* ===== SECTION DIVIDER ===== */
+.divider {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 32px 0;
+}
+
+/* ===== AUTH TOGGLE ===== */
+.auth-toggle {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 0.875rem;
+  color: #555;
+}
+
+.auth-toggle a {
+  font-weight: 500;
+}
+
+/* ===== ERROR / STATUS ===== */
+.error-msg {
+  background: #fff;
+  border: 1px solid #000;
+  color: #000;
+  padding: 10px 14px;
+  font-size: 0.8125rem;
+  margin-bottom: 16px;
+  display: none;
+}
+
+.error-msg.visible {
+  display: block;
+}
+
+/* ===== LOADING ===== */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  display: none;
+}
+
+.loading-overlay.visible {
+  display: flex;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e0e0e0;
+  border-top-color: #000;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  margin-top: 16px;
+  font-size: 0.875rem;
+  color: #555;
+}
+
+/* ===== PREVIEW ===== */
+.preview-frame {
+  width: 100%;
+  height: 600px;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+}
+
+.preview-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  text-align: center;
+  padding: 60px 24px;
+  color: #888;
+}
+
+.empty-state p {
+  margin-bottom: 20px;
+}
+
+/* ===== FORM NAVIGATION ===== */
+.form-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 32px;
+}
+
+/* ===== LOGO PREVIEW ===== */
+.logo-preview {
+  max-width: 120px;
+  max-height: 60px;
+  margin-top: 8px;
+  display: none;
+}
+
+.logo-preview.visible {
+  display: block;
+}
