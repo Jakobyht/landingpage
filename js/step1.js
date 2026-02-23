@@ -6,7 +6,6 @@ const GEMINI_API_KEY = "AIzaSyBtu_9ruX7qAXRlfC_OGrQNn2CRwzTJtVU";
 
 const form = document.getElementById("step1-form");
 const textArea = document.getElementById("achievements-text");
-const urlInput = document.getElementById("website-url");
 const fileInput = document.getElementById("file-input");
 const uploadArea = document.getElementById("upload-area");
 const filePreview = document.getElementById("file-preview");
@@ -68,47 +67,6 @@ async function analyzeFile(file) {
 }
 
 /**
- * Analyze a website using Gemini API
- */
-async function analyzeWebsite(url) {
-  const prompt = `Based on this portfolio/LinkedIn URL: ${url}
-
-  Provide guidance on what professional information might typically be found at such a profile:
-  - Work experience and roles
-  - Education and qualifications
-  - Skills and expertise
-  - Projects and achievements
-  - Contact information
-
-  Note: The actual CV will reference this URL for the user to check.`;
-
-  try {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{ text: prompt }]
-          }]
-        })
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Website analysis failed");
-    }
-
-    const data = await response.json();
-    return data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-  } catch (err) {
-    console.error("Website analysis error:", err);
-    return "";
-  }
-}
-
-/**
  * Convert file to base64
  */
 function fileToBase64(file) {
@@ -139,12 +97,8 @@ async function init() {
         if (achievements.fileAnalysis) {
           combinedText += (combinedText ? "\n\n" : "") + "=== Extracted from file ===\n" + achievements.fileAnalysis;
         }
-        if (achievements.websiteAnalysis) {
-          combinedText += (combinedText ? "\n\n" : "") + "=== Extracted from website ===\n" + achievements.websiteAnalysis;
-        }
 
         textArea.value = combinedText;
-        urlInput.value = achievements.websiteUrl || "";
         contactEmail.value = achievements.email || "";
         contactLinkedin.value = achievements.linkedin || "";
       } else {
@@ -226,9 +180,8 @@ form.addEventListener("submit", async (e) => {
   errorEl.classList.remove("visible");
 
   const text = textArea.value.trim();
-  const websiteUrl = urlInput.value.trim();
 
-  if (!text && !websiteUrl && !selectedFile) {
+  if (!text && !selectedFile) {
     showError("Please provide at least one source of information.");
     return;
   }
@@ -262,19 +215,6 @@ form.addEventListener("submit", async (e) => {
       }
     }
 
-    // Analyze website if provided
-    let websiteAnalysis = "";
-    if (websiteUrl) {
-      try {
-        loadingText.textContent = "Analyzing website...";
-        websiteAnalysis = await analyzeWebsite(websiteUrl);
-      } catch (webErr) {
-        console.error("Website analysis error:", webErr);
-        // Don't fail if website analysis fails, just continue
-        websiteAnalysis = "";
-      }
-    }
-
     // Save to Firestore
     try {
       loadingText.textContent = "Saving...";
@@ -284,8 +224,6 @@ form.addEventListener("submit", async (e) => {
         achievements: {
           text: text,
           fileAnalysis: fileAnalysis,
-          websiteUrl: websiteUrl,
-          websiteAnalysis: websiteAnalysis,
           email: contactEmail.value.trim(),
           linkedin: contactLinkedin.value.trim()
         }

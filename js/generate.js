@@ -130,7 +130,6 @@ async function generate() {
 function buildPrompt(data) {
   const achievements = data.achievements || {};
   const company = data.company || {};
-  const styling = data.styling || {};
 
   let prompt = `You are an expert web developer specializing in creating professional, modern CV websites.
 Your task is to generate a complete, self-contained HTML file for a personal CV website based on the user's data.
@@ -183,10 +182,6 @@ ADDITIONAL CONTEXT FROM PROJECT:
     prompt += `=== Extracted from uploaded file ===\n${achievements.fileAnalysis}\n\n`;
   }
 
-  if (achievements.websiteAnalysis) {
-    prompt += `=== Extracted from user's portfolio website ===\n${achievements.websiteAnalysis}\n\n`;
-  }
-
   prompt += `TARGET COMPANY & JOB:\n`;
   prompt += `Company: ${company.name || "Not specified"}\n`;
   if (company.websiteUrl) {
@@ -206,7 +201,6 @@ ADDITIONAL CONTEXT FROM PROJECT:
 }
 
 function buildTypstPrompt(data) {
-  const achievements = data.achievements || {};
   const company = data.company || {};
 
   let prompt = `You are an expert Typst typesetter.

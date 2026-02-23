@@ -1,5 +1,5 @@
 import { auth, db } from "./firebase-config.js";
-import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-firestore.js";
+import { collection, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-firestore.js";
 import { requireAuth, getProjectId } from "./router.js";
 
 const form = document.getElementById("step2-form");
@@ -17,13 +17,9 @@ const errorEl = document.getElementById("error");
 const loading = document.getElementById("loading");
 
 let selectedLogo = null;
-const projectId = getProjectId();
+let projectId = getProjectId();
 
-if (!projectId) {
-  window.location.href = "dashboard.html";
-}
-
-backLink.href = `create-step1.html?id=${projectId}`;
+backLink.href = "dashboard.html";
 
 /**
  * Convert file to base64 data URL
@@ -101,24 +97,30 @@ form.addEventListener("submit", async (e) => {
 
   try {
     const uid = auth.currentUser.uid;
-    const projectRef = doc(db, "users", uid, "projects", projectId);
+    const projectRef = projectId
+      ? doc(db, "users", uid, "projects", projectId)
+      : doc(collection(db, "users", uid, "projects"));
+
+    if (!projectId) {
+      projectId = projectRef.id;
+    }
 
     let logoData = "";
-    // Convert logo to base64 if new file selected
     if (selectedLogo) {
       logoData = await fileToBase64(selectedLogo);
-    } else {
-      // Keep existing logo
+    } else if (projectId) {
       const snap = await getDoc(projectRef);
       logoData = snap.data()?.company?.logoData || "";
     }
 
-    await updateDoc(projectRef, {
+    await setDoc(projectRef, {
+      status: "draft",
+      createdAt: serverTimestamp(),
       "company.name": name,
       "company.websiteUrl": companyUrl.value.trim(),
       "company.jobDescription": jobDescription.value.trim(),
       "company.logoData": logoData
-    });
+    }, { merge: true });
 
     window.location.href = `create-step3.html?id=${projectId}`;
   } catch (err) {

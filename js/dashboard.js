@@ -51,7 +51,7 @@ async function loadProjects(uid) {
       <div class="card-actions">
         ${status === "generated"
         ? `<a href="preview.html?id=${docSnap.id}" class="btn btn-sm">View</a>`
-        : `<a href="create-step1.html?id=${docSnap.id}" class="btn btn-sm btn-outline">Continue</a>`
+        : `<a href="create-step2.html?id=${docSnap.id}" class="btn btn-sm btn-outline">Continue</a>`
       }
         <button class="btn btn-sm btn-outline delete-btn" data-id="${docSnap.id}">Delete</button>
       </div>
