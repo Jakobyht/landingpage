@@ -1,20 +1,17 @@
-import { auth, db, onAuthStateChanged } from "./firebase-config.js";
+import { auth, db } from "./firebase-config.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-firestore.js";
 
 /**
- * Redirect to login if user is not authenticated.
- * Returns a promise that resolves with the user object.
+ * Wait for Firebase auth to fully initialize, then redirect to login
+ * if the user is not authenticated. Returns a promise with the user.
  */
-export function requireAuth() {
-  return new Promise((resolve) => {
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        window.location.href = "index.html";
-      } else {
-        resolve(user);
-      }
-    });
-  });
+export async function requireAuth() {
+  await auth.authStateReady(); // Waits until Firebase has loaded auth from storage
+  if (!auth.currentUser) {
+    window.location.href = "index.html";
+    return null;
+  }
+  return auth.currentUser;
 }
 
 /**
@@ -34,22 +31,25 @@ export async function requireKnowledgeBase(user) {
 /**
  * Redirect to dashboard if user is already authenticated.
  */
-export function redirectIfLoggedIn() {
-  return new Promise((resolve) => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        window.location.href = "dashboard.html";
-      } else {
-        resolve();
-      }
-    });
-  });
+export async function redirectIfLoggedIn() {
+  await auth.authStateReady();
+  if (auth.currentUser) {
+    window.location.href = "dashboard.html";
+  }
 }
 
 /**
- * Get project ID from URL params.
+ * Get project ID from URL params. 
+ * Fallback to sessionStorage to handle aggressive 301 redirects that strip query params.
  */
 export function getProjectId() {
   const params = new URLSearchParams(window.location.search);
-  return params.get("id");
+  const idFromUrl = params.get("id");
+
+  if (idFromUrl) {
+    sessionStorage.setItem("currentProjectId", idFromUrl);
+    return idFromUrl;
+  }
+
+  return sessionStorage.getItem("currentProjectId");
 }

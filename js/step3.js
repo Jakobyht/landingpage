@@ -1,5 +1,5 @@
-import { auth, db } from "./firebase-config.js";
-import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-firestore.js";
+import { db } from "./firebase-config.js";
+import { doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-firestore.js";
 import { requireAuth, getProjectId } from "./router.js";
 
 const form = document.getElementById("step3-form");
@@ -14,9 +14,14 @@ const customColors = document.getElementById("custom-colors");
 const customFonts = document.getElementById("custom-fonts");
 
 const projectId = getProjectId();
-if (!projectId) window.location.href = "dashboard.html";
+let currentUser = null;
 
-backLink.href = `create-step2.html?id=${projectId}`;
+if (!projectId) {
+  alert("Project ID is missing! Redirecting to Dashboard.");
+  window.location.href = "dashboard.html";
+}
+
+backLink.href = projectId ? `create-step2.html?id=${projectId}` : "dashboard.html";
 
 let colorMode = "custom";
 let fontMode = "custom";
@@ -25,21 +30,28 @@ let primaryColor = "#000000";
 let accentColor = "#555555";
 
 async function init() {
-  const user = await requireAuth();
+  currentUser = await requireAuth();
+  const user = currentUser;
 
   // Load existing data
-  const snap = await getDoc(doc(db, "users", user.uid, "projects", projectId));
-  if (snap.exists()) {
-    const data = snap.data();
-    if (data.styling) {
-      colorMode = data.styling.colorMode || "custom";
-      fontMode = data.styling.fontMode || "custom";
-      primaryColor = data.styling.primaryColor || "#000000";
-      accentColor = data.styling.accentColor || "#555555";
-      if (data.styling.fontFamily) {
-        fontSelect.value = data.styling.fontFamily;
+  if (projectId) {
+    try {
+      const snap = await getDoc(doc(db, "users", user.uid, "projects", projectId));
+      if (snap.exists()) {
+        const data = snap.data();
+        if (data.styling) {
+          colorMode = data.styling.colorMode || "custom";
+          fontMode = data.styling.fontMode || "custom";
+          primaryColor = data.styling.primaryColor || "#000000";
+          accentColor = data.styling.accentColor || "#555555";
+          if (data.styling.fontFamily) {
+            fontSelect.value = data.styling.fontFamily;
+          }
+          formatMode = data.styling.format || "html";
+        }
       }
-      formatMode = data.styling.format || "html";
+    } catch (err) {
+      console.error("Error loading project data:", err);
     }
   }
 
@@ -162,20 +174,31 @@ function showError(msg) {
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   errorEl.classList.remove("visible");
+
+  if (!currentUser) {
+    showError("Authentication not ready. Please wait a moment and try again.");
+    return;
+  }
+
   loading.classList.add("visible");
 
   try {
-    const uid = auth.currentUser.uid;
+    if (!projectId) {
+      throw new Error("Project ID is missing. Cannot save styling preferences.");
+    }
+    const uid = currentUser.uid;
     const projectRef = doc(db, "users", uid, "projects", projectId);
 
-    await updateDoc(projectRef, {
-      "styling.colorMode": colorMode,
-      "styling.primaryColor": colorMode === "custom" ? primaryColor : "",
-      "styling.accentColor": colorMode === "custom" ? accentColor : "",
-      "styling.fontMode": fontMode,
-      "styling.fontFamily": fontMode === "custom" ? fontSelect.value : "",
-      "styling.format": formatMode
-    });
+    await setDoc(projectRef, {
+      styling: {
+        colorMode,
+        primaryColor: colorMode === "custom" ? primaryColor : "",
+        accentColor: colorMode === "custom" ? accentColor : "",
+        fontMode,
+        fontFamily: fontMode === "custom" ? fontSelect.value : "",
+        format: formatMode
+      }
+    }, { merge: true });
 
     window.location.href = `preview.html?id=${projectId}`;
   } catch (err) {

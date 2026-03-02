@@ -1,4 +1,4 @@
-import { auth, db } from "./firebase-config.js";
+import { db } from "./firebase-config.js";
 import { collection, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-firestore.js";
 import { requireAuth, getProjectId } from "./router.js";
 
@@ -18,6 +18,8 @@ const loading = document.getElementById("loading");
 
 let selectedLogo = null;
 let projectId = getProjectId();
+const isNewProject = !projectId;
+let currentUser = null; // Set after requireAuth resolves
 
 backLink.href = "dashboard.html";
 
@@ -34,20 +36,26 @@ function fileToBase64(file) {
 }
 
 async function init() {
-  const user = await requireAuth();
+  currentUser = await requireAuth();
 
-  // Load existing data
-  const snap = await getDoc(doc(db, "users", user.uid, "projects", projectId));
-  if (snap.exists()) {
-    const data = snap.data();
-    companyName.value = data.company?.name || "";
-    companyUrl.value = data.company?.websiteUrl || "";
-    jobDescription.value = data.company?.jobDescription || "";
-    if (data.company?.logoData) {
-      logoImg.src = data.company.logoData;
-      logoName.textContent = "Uploaded logo";
-      logoPreviewContainer.style.display = "flex";
-      logoUploadArea.style.display = "none";
+  // Load existing data (only when editing an existing project)
+  if (projectId) {
+    try {
+      const snap = await getDoc(doc(db, "users", currentUser.uid, "projects", projectId));
+      if (snap.exists()) {
+        const data = snap.data();
+        companyName.value = data.company?.name || "";
+        companyUrl.value = data.company?.websiteUrl || "";
+        jobDescription.value = data.company?.jobDescription || "";
+        if (data.company?.logoData) {
+          logoImg.src = data.company.logoData;
+          logoName.textContent = "Uploaded logo";
+          logoPreviewContainer.style.display = "flex";
+          logoUploadArea.style.display = "none";
+        }
+      }
+    } catch (err) {
+      console.error("Error loading project data:", err);
     }
   }
 }
@@ -87,6 +95,11 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
   errorEl.classList.remove("visible");
 
+  if (!currentUser) {
+    showError("Authentication not ready. Please wait a moment and try again.");
+    return;
+  }
+
   const name = companyName.value.trim();
   if (!name) {
     showError("Please enter the company name.");
@@ -96,36 +109,39 @@ form.addEventListener("submit", async (e) => {
   loading.classList.add("visible");
 
   try {
-    const uid = auth.currentUser.uid;
+    const uid = currentUser.uid;
     const projectRef = projectId
       ? doc(db, "users", uid, "projects", projectId)
       : doc(collection(db, "users", uid, "projects"));
 
     if (!projectId) {
       projectId = projectRef.id;
+      sessionStorage.setItem("currentProjectId", projectId);
     }
 
+    // Preserve existing logo if no new one was selected
     let logoData = "";
     if (selectedLogo) {
       logoData = await fileToBase64(selectedLogo);
-    } else if (projectId) {
+    } else if (!isNewProject) {
       const snap = await getDoc(projectRef);
       logoData = snap.data()?.company?.logoData || "";
     }
 
     await setDoc(projectRef, {
-      status: "draft",
-      createdAt: serverTimestamp(),
-      "company.name": name,
-      "company.websiteUrl": companyUrl.value.trim(),
-      "company.jobDescription": jobDescription.value.trim(),
-      "company.logoData": logoData
+      ...(isNewProject ? { status: "draft", createdAt: serverTimestamp() } : {}),
+      company: {
+        name,
+        websiteUrl: companyUrl.value.trim(),
+        jobDescription: jobDescription.value.trim(),
+        logoData
+      }
     }, { merge: true });
 
     window.location.href = `create-step3.html?id=${projectId}`;
   } catch (err) {
-    console.error(err);
-    showError("Failed to save. Please try again.");
+    console.error("Step 2 save error:", err);
+    showError(`Failed to save: ${err.message || "Please try again."}`);
     loading.classList.remove("visible");
   }
 });

@@ -11,6 +11,7 @@ const logoutBtn = document.getElementById("logout-btn");
 async function init() {
   loading.classList.add("visible");
   const user = await requireAuth();
+  if (!user) return;
   const hasKB = await requireKnowledgeBase(user);
   if (!hasKB) return;
   await loadProjects(user.uid);
@@ -50,8 +51,8 @@ async function loadProjects(uid) {
       <div class="card-meta">${status === "generated" ? "Generated" : "Draft"} &middot; ${date}</div>
       <div class="card-actions">
         ${status === "generated"
-        ? `<a href="preview.html?id=${docSnap.id}" class="btn btn-sm">View</a>`
-        : `<a href="create-step2.html?id=${docSnap.id}" class="btn btn-sm btn-outline">Continue</a>`
+        ? `<a href="preview.html?id=${docSnap.id}" onclick="sessionStorage.setItem('currentProjectId', '${docSnap.id}')" class="btn btn-sm">View</a>`
+        : `<a href="create-step2.html?id=${docSnap.id}" onclick="sessionStorage.setItem('currentProjectId', '${docSnap.id}')" class="btn btn-sm btn-outline">Continue</a>`
       }
         <button class="btn btn-sm btn-outline delete-btn" data-id="${docSnap.id}">Delete</button>
       </div>
@@ -67,7 +68,7 @@ async function loadProjects(uid) {
     btn.addEventListener("click", async () => {
       if (!confirm("Delete this project?")) return;
       const id = btn.dataset.id;
-      await deleteDoc(doc(db, "users", auth.currentUser.uid, "projects", id));
+      await deleteDoc(doc(db, "users", uid, "projects", id));
       btn.closest(".card").remove();
       // Show empty state if no more cards
       if (grid.children.length === 0) {

@@ -1,8 +1,8 @@
-import { auth, db } from "./firebase-config.js";
+import { db } from "./firebase-config.js";
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-firestore.js";
 import { requireAuth, getProjectId } from "./router.js";
 
-const GEMINI_API_KEY = "AIzaSyBtu_9ruX7qAXRlfC_OGrQNn2CRwzTJtVU";
+const GLM_API_KEY = "modalresearch_IxC5_YNq7jLS1KsZLhmDNVA0R3LF9y8ALj4jA5UyaqQ";
 
 const previewFrame = document.getElementById("preview-frame");
 const loadingEl = document.getElementById("loading");
@@ -21,10 +21,11 @@ let generatedHtml = "";
 let generatedTypst = "";
 let projectData = null;
 let knowledgeBase = {};
+let currentUser = null;
 
 async function init() {
-  const user = await requireAuth();
-  const uid = user.uid;
+  currentUser = await requireAuth();
+  const uid = currentUser.uid;
 
   const snap = await getDoc(doc(db, "users", uid, "projects", projectId));
   if (!snap.exists()) {
@@ -63,31 +64,31 @@ async function generate() {
     const prompt = isTypst ? buildTypstPrompt(projectData) : buildPrompt(projectData);
 
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+      "https://corsproxy.io/?https://api.us-west-2.modal.direct/v1/chat/completions",
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${GLM_API_KEY}`
+        },
         body: JSON.stringify({
-          contents: [{
-            parts: [{ text: prompt }]
-          }],
-          generationConfig: {
-            temperature: 0.7,
-            maxOutputTokens: 8192
-          }
+          model: "zai-org/GLM-5-FP8",
+          messages: [{ role: "user", content: prompt }],
+          temperature: 0.7,
+          max_tokens: 8192
         })
       }
     );
 
     if (!response.ok) {
       const err = await response.json();
-      console.error("Gemini API Error:", err);
+      console.error("GLM API Error:", err);
       throw new Error(err.error?.message || "API request failed");
     }
 
     const data = await response.json();
-    console.log("Gemini API Full Response:", data);
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    console.log("GLM API Full Response:", data);
+    const text = data.choices?.[0]?.message?.content || "";
     console.log("Extracted Text:", text);
 
     // Extract HTML from the response (may be wrapped in markdown code blocks)
@@ -96,7 +97,7 @@ async function generate() {
       generatedTypst = text.replace(/```typst/g, "").replace(/```/g, "").trim();
 
       // Save to Firestore
-      const uid = auth.currentUser.uid;
+      const uid = currentUser.uid;
       await updateDoc(doc(db, "users", uid, "projects", projectId), {
         generatedTypst: generatedTypst,
         status: "generated"
@@ -111,7 +112,7 @@ async function generate() {
       }
 
       // Save to Firestore
-      const uid = auth.currentUser.uid;
+      const uid = currentUser.uid;
       await updateDoc(doc(db, "users", uid, "projects", projectId), {
         generatedHtml: generatedHtml,
         status: "generated"
